@@ -1,0 +1,26 @@
+---
+- name: Configurar Node.js e aplicação
+  hosts: localhost
+  become: yes
+
+  tasks:
+    - name: Atualizar repositórios
+      apt:
+        update_cache: yes
+
+    - name: Instalar Node.js e npm
+      apt:
+        name:
+          - nodejs
+          - npm
+        state: present
+
+    - name: Criar diretório da aplicação
+      file:
+        path: /home/{{ ansible_user }}/app
+        state: directory
+
+    - name: Copiar arquivos da aplicação
+      copy:
+        src: .
+        dest: /home/{{ ansible_user }}/app
