@@ -1,2 +1,2 @@
-# lab-docker-ci
+lab-docker-ci
 Trabalho de Docker + CI/CD
