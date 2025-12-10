@@ -4,43 +4,34 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
   test:
     name: Rodar testes simples
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout do código
-        uses: actions/checkout@v4
-      - name: Testes simples
-        run: echo "✅ Testes executados com sucesso!"
+      - uses: actions/checkout@v4
+      - run: echo "✅ Testes executados com sucesso!"
 
   build:
     name: Construir imagem Docker
     runs-on: ubuntu-latest
     needs: test
     steps:
-      - name: Checkout do código
-        uses: actions/checkout@v4
-      - name: Build da imagem Docker
-        run: docker build -t lab-docker-ci:latest .
+      - uses: actions/checkout@v4
+      - run: docker build -t lab-docker-ci:latest .
 
   publish:
     name: Publicar imagem no Docker Hub
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Checkout do código
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       - name: Login no Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Tag e push da imagem
-        run: |
+      - run: |
           docker tag lab-docker-ci:latest ${{ secrets.DOCKERHUB_USERNAME }}/lab-docker-ci:latest
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/lab-docker-ci:latest
